@@ -14,6 +14,11 @@ public class Category {
     @NotNull
     private String name;
 
+    public Category(Integer id, String name) {
+        this.id = id;
+    	this.name = name;
+    }
+    
     public Category(String name) {
         this.name = name;
     }

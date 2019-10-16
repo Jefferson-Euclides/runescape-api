@@ -1,6 +1,7 @@
 package com.runescape.runescape.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import com.runescape.runescape.exceptions.CategoryNotFoundException;
 import com.runescape.runescape.exceptions.PlayerNotFoundException;
 import com.runescape.runescape.exceptions.ScoreExistsException;
 import com.runescape.runescape.exceptions.ScoreNotFoundException;
+import com.runescape.runescape.model.Category;
 import com.runescape.runescape.model.Player;
 import com.runescape.runescape.model.Score;
 import com.runescape.runescape.repository.CategoryRepository;
@@ -128,6 +130,18 @@ public class ScoreService {
         scoreRepository.save(overallScore);
 
         logger.info("Updated Overall score for player with id: " + playerId);
+    }
+    
+    public void addOverallScore(Player player) {
+    	Optional<Category> overallCategory = categoryRepository.findByName("Overall");
+        Player newPlayerAuxiliar = player;
+        
+        Score overallScore = new Score(overallCategory.orElseThrow(
+                () -> new PlayerNotFoundException(newPlayerAuxiliar.getId())
+        ), player, 0, 0L);
+        
+        scoreRepository.save(overallScore);
+        logger.info("Inserted overall score for player");
     }
 
 }

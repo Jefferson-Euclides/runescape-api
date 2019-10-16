@@ -21,6 +21,11 @@ public class Player {
     public Player(String name) {
         this.name = name;
     }
+    
+    public Player(Integer id, String name) {
+        this.id = id;
+    	this.name = name;
+    }
 
     public Player() {} // for JPA
 

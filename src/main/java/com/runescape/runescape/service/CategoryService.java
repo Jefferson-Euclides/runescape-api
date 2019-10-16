@@ -2,6 +2,7 @@ package com.runescape.runescape.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +11,10 @@ import org.springframework.stereotype.Service;
 
 import com.runescape.runescape.exceptions.CategoryNotFoundException;
 import com.runescape.runescape.exceptions.OverallCategoryCannotBeDeletedException;
+import com.runescape.runescape.exceptions.PlayerNotFoundException;
 import com.runescape.runescape.model.Category;
+import com.runescape.runescape.model.Player;
+import com.runescape.runescape.model.Score;
 import com.runescape.runescape.repository.CategoryRepository;
 
 @Service
@@ -62,5 +66,5 @@ public class CategoryService {
         categoryRepository.deleteById(id);
         logger.info("Deleted category with id: " + id);
     }
-
+    
 }

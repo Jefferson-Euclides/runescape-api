@@ -29,6 +29,9 @@ public class PlayerService {
 
     @Autowired
     CategoryRepository categoryRepository;
+    
+    @Autowired
+    ScoreService scoreService;
 
     @Autowired
     ScoreRepository scoreRepository;
@@ -57,17 +60,9 @@ public class PlayerService {
     public Player insertPlayer(Player newPlayer) {
     	newPlayer = playerRepository.save(newPlayer);
         logger.info("Inserted player with id: " + newPlayer.getId());
-
-        Optional<Category> overallCategory = categoryRepository.findByName("Overall");
-        Player newPlayerAuxiliar = newPlayer;
         
-        Score overallScore = new Score(overallCategory.orElseThrow(
-                () -> new PlayerNotFoundException(newPlayerAuxiliar.getId())
-        ), newPlayer, 0, 0L);
+        scoreService.addOverallScore(newPlayer);
         
-        scoreRepository.save(overallScore);
-        
-        logger.info("Inserted overall score for player");
         return newPlayer;
     }
 

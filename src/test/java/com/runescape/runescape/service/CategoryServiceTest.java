@@ -153,13 +153,11 @@ public class CategoryServiceTest {
 	
 	@Test
 	public void deteleCategoryShouldNoException() {
-		Category category = new Category("Test");
-		
 		when(categoryRepository.existsById(2)).thenReturn(true);
 		
 		categoryService.deleteCategory(2);
 	
-		verify(categoryRepository, times(1)).delete(category);
+		verify(categoryRepository, times(1)).deleteById(2);
 	}
 	
 	@Test(expected = OverallCategoryCannotBeDeletedException.class)

@@ -44,7 +44,7 @@ public class CategoryService {
     public Category insertCategory(Category category) {
         category = categoryRepository.save(category);
         
-        //logger.info("Inserted category with name: " + category.getId());
+        logger.info("Inserted category with name: " + category.getId());
         return category;
     }
 

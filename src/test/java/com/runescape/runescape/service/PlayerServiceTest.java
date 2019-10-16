@@ -7,16 +7,19 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -38,6 +41,11 @@ public class PlayerServiceTest {
 	
 	@InjectMocks
 	PlayerService playerService;
+	
+	@Before
+    public void init() {
+        MockitoAnnotations.initMocks(this);
+    }
 	
 	@Test
 	public void getAllPlayersShouldReturnAllPlayers() {
@@ -131,22 +139,12 @@ public class PlayerServiceTest {
 	@Test
 	public void searchPlayerByNameShouldReturnPlayer() {
 		List<Player> listPlayers = new ArrayList<Player>();
-		List<Player> returnedList = new ArrayList<Player>();
 		
-		//Adding the entire list
 		Player playerOne = new Player("Player One");
 		Player playerTwo = new Player("Player Two");
-		Player playerThree = new Player("Dont");
-
-		listPlayers.add(playerOne);
-		listPlayers.add(playerTwo);
-		listPlayers.add(playerThree);
-
-		//Adding the return list
-		listPlayers.remove(playerThree);
-		returnedList.addAll(listPlayers);
+		listPlayers = Arrays.asList(playerOne, playerTwo);
 		
-		when(playerRepository.findByNameContainingIgnoreCase("Player")).thenReturn(returnedList);
+		when(playerRepository.findByNameContainingIgnoreCase("Player")).thenReturn(listPlayers);
 		
 		List<Player> finalList = playerService.searchPlayerByName("Player");
 		
@@ -156,9 +154,14 @@ public class PlayerServiceTest {
 		verify(playerRepository, times(1)).findByNameContainingIgnoreCase("Player");
 	}
 	
-	@Test(expected = NullPointerException.class)
-	public void searchPlayerByNullNameShouldReturnNullPointerException() {
-		playerService.searchPlayerByName(null);
+	@Test
+	public void searchPlayerByNullNameShouldEmptyList() {
+		when(playerRepository.findByNameContainingIgnoreCase(null)).thenReturn(Collections.emptyList());
+		
+		List<Player> list = playerService.searchPlayerByName(null);
+		
+		assertEquals(Collections.emptyList(), list);
+		verify(playerRepository, times(1)).findByNameContainingIgnoreCase(null);
 	}
 	
 	@Test

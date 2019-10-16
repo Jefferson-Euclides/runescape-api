@@ -1,5 +1,6 @@
 package com.runescape.runescape.service;
 
+import static org.hamcrest.CoreMatchers.any;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -100,6 +101,8 @@ public class CategoryServiceTest {
 
 		Category category = new Category("Test");
 		
+		when(categoryRepository.save(category)).thenReturn(category);
+		
 		categoryService.insertCategory(category);
 		
 		//Verification
@@ -111,33 +114,17 @@ public class CategoryServiceTest {
 	
 	@Test(expected = NullPointerException.class)
 	public void saveCategoryWithNullShouldNullPointerException() {
-
 		categoryService.insertCategory(null);
-		
 	}
 	
 	@Test
 	public void updateCategoryShouldChangeName() {
-
 		Category category = new Category("Update Test");
 
 		when(categoryRepository.findById(1)).thenReturn(Optional.of(category));
 		
 		categoryService.updateCategory(category, 1);
 		
-		verify(categoryRepository, times(1)).findById(1);
-
-	}
-	
-	@Test(expected = NullPointerException.class)
-	public void updateNullCategoryShouldNullPointerException() {
-
-		Category category = new Category(null);
-		
-		when(categoryRepository.findById(1)).thenReturn(Optional.of(category));
-		
-		categoryService.updateCategory(category, 1);
-
 		verify(categoryRepository, times(1)).findById(1);
 	}
 	

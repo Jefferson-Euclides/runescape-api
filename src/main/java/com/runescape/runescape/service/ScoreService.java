@@ -110,7 +110,7 @@ public class ScoreService {
         updatePlayerOverallScore(playerId);
     }
 
-    private void updatePlayerOverallScore(Integer playerId) {
+    protected void updatePlayerOverallScore(Integer playerId) {
         List<Score> playerScores = getAllScoresByPlayerId(playerId);
         Predicate<Score> belongsToOverallCategory = Score::belongsToOverallCategory;
         Score overallScore = playerScores.stream()

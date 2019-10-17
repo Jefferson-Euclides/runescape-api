@@ -3,6 +3,12 @@ package com.runescape.runescape.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+
+@Data
+@NoArgsConstructor
 @Entity
 @Table(name = "category")
 public class Category {
@@ -13,33 +19,9 @@ public class Category {
 
     @NotNull
     private String name;
-
-    public Category(Integer id, String name) {
-        this.id = id;
-    	this.name = name;
-    }
     
     public Category(String name) {
-        this.name = name;
+    	this.name = name;
     }
-
-    public Category() {} // for JPA
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
 }
 

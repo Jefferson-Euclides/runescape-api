@@ -60,7 +60,7 @@ public class CategoryService {
         if (!categoryRepository.existsById(id)) {
             throw new CategoryNotFoundException(id);
         }
-        if (id == 1) {
+        if (id.equals(1) ) {
             throw new OverallCategoryCannotBeDeletedException();
         }
         categoryRepository.deleteById(id);

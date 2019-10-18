@@ -5,6 +5,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static com.runescape.runescape.util.Utils.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,24 +15,19 @@ import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import com.runescape.runescape.exceptions.PlayerNotFoundException;
 import com.runescape.runescape.model.Player;
 import com.runescape.runescape.repository.PlayerRepository;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
 @AutoConfigureMockMvc
-public class PlayerServiceTest {
+public class PlayerServiceTest extends BaseTest{
 
 	@Mock
 	PlayerRepository playerRepository;
@@ -50,13 +46,11 @@ public class PlayerServiceTest {
 	@Test
 	public void getAllPlayersShouldReturnAllPlayers() {
 		List<Player> list = new ArrayList<Player>();
-		Player playerOne = new Player("John");
-        Player playerTwo = new Player("Alex");
-        Player playerThree = new Player("Steve");
+		Player playerOne = new Player(generateRandomString(10));
+        Player playerTwo = new Player(generateRandomString(10));
+        Player playerThree = new Player(generateRandomString(10));
          
-        list.add(playerOne);
-        list.add(playerTwo);
-        list.add(playerThree);
+        list = Arrays.asList(playerOne, playerTwo, playerThree);
          
         when(playerRepository.findAll()).thenReturn(list);
          
@@ -80,23 +74,25 @@ public class PlayerServiceTest {
 	
 	@Test
 	public void getPlayerByIdShouldReturnPlayer() {
-		Optional<Player> optionalPlayer = Optional.of(new Player("Player One"));
+		Optional<Player> optionalPlayer = Optional.of(new Player(generateRandomString(10)));
+		Integer randomId = getRandomIntegerBetweenRange(1, 10);
 		
-		Mockito.<Optional<Player>> when(playerRepository.findById(1)).thenReturn(optionalPlayer);
+		Mockito.<Optional<Player>> when(playerRepository.findById(randomId)).thenReturn(optionalPlayer);
 		
-		Player returnedPlayer = playerService.getPlayerById(1);
+		Player returnedPlayer = playerService.getPlayerById(randomId);
 		
-		assertEquals("Player One", returnedPlayer.getName());
+		assertEquals(optionalPlayer.get().getName(), returnedPlayer.getName());
 	}
 	
 	@Test(expected = PlayerNotFoundException.class)
 	public void getCategoryByIdNotExistsShouldReturnPlayerNotFoundException() {
-		playerService.getPlayerById(1);
+		Integer randomId = getRandomIntegerBetweenRange(1, 10);
+		playerService.getPlayerById(randomId);
 	}
 	
 	@Test
 	public void savePlayerShouldNoException() {
-		Player player = new Player(1, "Player One");
+		Player player = new Player(generateRandomString(10));
 		
 		when(playerRepository.save(player)).thenReturn(player);
 		doNothing().when(scoreService).addOverallScore(player);
@@ -107,7 +103,7 @@ public class PlayerServiceTest {
 		ArgumentCaptor<Player> captor = ArgumentCaptor.forClass(Player.class);
 		verify(playerRepository).save(captor.capture());
 		
-		assertEquals("Player One", captor.getValue().getName());
+		assertEquals(player.getName(), captor.getValue().getName());
 	}
 	
 	@Test(expected = NullPointerException.class)
@@ -117,41 +113,39 @@ public class PlayerServiceTest {
 	
 	@Test
 	public void updatePlayerShouldChangeName() {
-		Player player = new Player("Update Player");
-
-		when(playerRepository.existsById(1)).thenReturn(true);
-		when(playerRepository.findById(1)).thenReturn(Optional.of(player));
+		Player player = new Player(generateRandomString(10));
+		Integer randomId = getRandomIntegerBetweenRange(1, 10);
 		
-		playerService.updatePlayer(player, 1);
+		when(playerRepository.existsById(randomId)).thenReturn(true);
+		when(playerRepository.findById(randomId)).thenReturn(Optional.of(player));
 		
-		verify(playerRepository, times(1)).findById(1);
+		playerService.updatePlayer(player, randomId);
+		
+		verify(playerRepository, times(1)).findById(randomId);
 	}
 	
 	@Test(expected = PlayerNotFoundException.class)
 	public void updatePlayerInvalidIdShouldPlayerNotFoundException() {
 		Player player = new Player("Test");
+		Integer randomId = getRandomIntegerBetweenRange(1, 10);
+		
+		playerService.updatePlayer(player, randomId);
 
-		playerService.updatePlayer(player, 1);
-
-		verify(playerRepository, times(1)).existsById(1);
+		verify(playerRepository, times(1)).existsById(randomId);
 	}
 	
 	@Test
 	public void searchPlayerByNameShouldReturnPlayer() {
-		List<Player> listPlayers = new ArrayList<Player>();
+		Player playerOne = new Player(generateRandomString(10));
 		
-		Player playerOne = new Player("Player One");
-		Player playerTwo = new Player("Player Two");
-		listPlayers = Arrays.asList(playerOne, playerTwo);
+		when(playerRepository.findByNameContainingIgnoreCase(playerOne.getName()))
+				.thenReturn(Arrays.asList(playerOne));
 		
-		when(playerRepository.findByNameContainingIgnoreCase("Player")).thenReturn(listPlayers);
+		List<Player> finalList = playerService.searchPlayerByName(playerOne.getName());
 		
-		List<Player> finalList = playerService.searchPlayerByName("Player");
-		
-		assertEquals(2, finalList.size());
+		assertEquals(1, finalList.size());
 		assertEquals(playerOne, finalList.get(0));
-		assertEquals(playerTwo, finalList.get(1));
-		verify(playerRepository, times(1)).findByNameContainingIgnoreCase("Player");
+		verify(playerRepository, times(1)).findByNameContainingIgnoreCase(playerOne.getName());
 	}
 	
 	@Test
@@ -166,9 +160,10 @@ public class PlayerServiceTest {
 	
 	@Test
 	public void detelePlayerShouldNoException() {
-		playerService.deletePlayer(1);
+		Integer randomId = getRandomIntegerBetweenRange(1, 10);
+		playerService.deletePlayer(randomId);
 	
-		verify(playerRepository, times(1)).deleteById(1);
+		verify(playerRepository, times(1)).deleteById(randomId);
 	}
 	
 }

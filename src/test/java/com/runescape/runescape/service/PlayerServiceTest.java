@@ -46,9 +46,9 @@ public class PlayerServiceTest extends BaseTest{
 	@Test
 	public void getAllPlayersShouldReturnAllPlayers() {
 		List<Player> list = new ArrayList<Player>();
-		Player playerOne = new Player(generateRandomString(10));
-        Player playerTwo = new Player(generateRandomString(10));
-        Player playerThree = new Player(generateRandomString(10));
+		Player playerOne = generateRandomPlayer();
+        Player playerTwo = generateRandomPlayer();
+        Player playerThree = generateRandomPlayer();
          
         list = Arrays.asList(playerOne, playerTwo, playerThree);
          
@@ -74,7 +74,7 @@ public class PlayerServiceTest extends BaseTest{
 	
 	@Test
 	public void getPlayerByIdShouldReturnPlayer() {
-		Optional<Player> optionalPlayer = Optional.of(new Player(generateRandomString(10)));
+		Optional<Player> optionalPlayer = Optional.of(generateRandomPlayer());
 		Integer randomId = getRandomIntegerBetweenRange(1, 10);
 		
 		Mockito.<Optional<Player>> when(playerRepository.findById(randomId)).thenReturn(optionalPlayer);
@@ -92,7 +92,7 @@ public class PlayerServiceTest extends BaseTest{
 	
 	@Test
 	public void savePlayerShouldNoException() {
-		Player player = new Player(generateRandomString(10));
+		Player player = generateRandomPlayer();
 		
 		when(playerRepository.save(player)).thenReturn(player);
 		doNothing().when(scoreService).addOverallScore(player);
@@ -113,7 +113,7 @@ public class PlayerServiceTest extends BaseTest{
 	
 	@Test
 	public void updatePlayerShouldChangeName() {
-		Player player = new Player(generateRandomString(10));
+		Player player = generateRandomPlayer();
 		Integer randomId = getRandomIntegerBetweenRange(1, 10);
 		
 		when(playerRepository.existsById(randomId)).thenReturn(true);
@@ -126,7 +126,7 @@ public class PlayerServiceTest extends BaseTest{
 	
 	@Test(expected = PlayerNotFoundException.class)
 	public void updatePlayerInvalidIdShouldPlayerNotFoundException() {
-		Player player = new Player("Test");
+		Player player = generateRandomPlayer();
 		Integer randomId = getRandomIntegerBetweenRange(1, 10);
 		
 		playerService.updatePlayer(player, randomId);
@@ -136,7 +136,7 @@ public class PlayerServiceTest extends BaseTest{
 	
 	@Test
 	public void searchPlayerByNameShouldReturnPlayer() {
-		Player playerOne = new Player(generateRandomString(10));
+		Player playerOne = generateRandomPlayer();
 		
 		when(playerRepository.findByNameContainingIgnoreCase(playerOne.getName()))
 				.thenReturn(Arrays.asList(playerOne));

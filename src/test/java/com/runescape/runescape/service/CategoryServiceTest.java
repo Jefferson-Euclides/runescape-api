@@ -1,7 +1,6 @@
 package com.runescape.runescape.service;
 
-import static com.runescape.runescape.util.Utils.generateRandomString;
-import static com.runescape.runescape.util.Utils.getRandomIntegerBetweenRange;
+import static com.runescape.runescape.util.Utils.*;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -44,9 +43,9 @@ public class CategoryServiceTest extends BaseTest{
 	@Test
 	public void getAllCategoriesShouldReturnAllCategories() {
 		List<Category> list = new ArrayList<Category>();
-		Category categoryOne = new Category(generateRandomString(10));
-		Category categoryTwo = new Category(generateRandomString(10));
-		Category categoryThree = new Category(generateRandomString(10));
+		Category categoryOne = generateRandomCategory();
+		Category categoryTwo = generateRandomCategory();
+		Category categoryThree = generateRandomCategory();
         
 		list = Arrays.asList(categoryOne, categoryTwo, categoryThree);
          
@@ -72,7 +71,7 @@ public class CategoryServiceTest extends BaseTest{
 	
 	@Test
 	public void getCategoryByIdShouldReturnCategory() {
-		Optional<Category> optionalCategory = Optional.of(new Category(generateRandomString(10)));
+		Optional<Category> optionalCategory = Optional.of(generateRandomCategory());
 		Integer randomId = getRandomIntegerBetweenRange(1, 10);
 		
 		Mockito.<Optional<Category>> when(categoryRepository.findById(randomId)).thenReturn(optionalCategory);
@@ -91,7 +90,7 @@ public class CategoryServiceTest extends BaseTest{
 	
 	@Test
 	public void saveCategoryShouldNoException() {
-		Category category = new Category(generateRandomString(10));
+		Category category = generateRandomCategory();
 		
 		when(categoryRepository.save(category)).thenReturn(category);
 		
@@ -111,7 +110,7 @@ public class CategoryServiceTest extends BaseTest{
 	
 	@Test
 	public void updateCategoryShouldChangeName() {
-		Category category = new Category(generateRandomString(10));
+		Category category = generateRandomCategory();
 		Integer randomId = getRandomIntegerBetweenRange(1, 10);
 
 		when(categoryRepository.findById(randomId)).thenReturn(Optional.of(category));
@@ -123,7 +122,7 @@ public class CategoryServiceTest extends BaseTest{
 	
 	@Test(expected = CategoryNotFoundException.class)
 	public void updateCategoryInvalidIdShouldCategoryNotFoundException() {
-		Category category = new Category(generateRandomString(10));
+		Category category = generateRandomCategory();
 		Integer randomId = getRandomIntegerBetweenRange(1, 10);
 		
 		categoryService.updateCategory(category, randomId);

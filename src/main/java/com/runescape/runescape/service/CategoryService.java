@@ -26,7 +26,7 @@ public class CategoryService {
     CategoryRepository categoryRepository;
 
     public List<Category> getAllCategories() {
-        logger.info("Getting all categories");
+        logger.trace("Getting all categories");
         List<Category> categories = new ArrayList<>();
         
         categoryRepository.findAll().

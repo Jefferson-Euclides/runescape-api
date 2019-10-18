@@ -1,6 +1,5 @@
 package com.runescape.runescape.service;
 
-import static com.runescape.runescape.util.Utils.*;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;

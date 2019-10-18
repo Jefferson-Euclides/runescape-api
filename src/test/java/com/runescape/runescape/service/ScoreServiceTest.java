@@ -1,8 +1,5 @@
 package com.runescape.runescape.service;
 
-import static com.runescape.runescape.util.Utils.generateRandomPlayer;
-import static com.runescape.runescape.util.Utils.generateRandomScore;
-import static com.runescape.runescape.util.Utils.getRandomIntegerBetweenRange;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;

@@ -5,7 +5,6 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static com.runescape.runescape.util.Utils.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;

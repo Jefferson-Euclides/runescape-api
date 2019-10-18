@@ -56,7 +56,7 @@ public class ScoreServiceTest extends BaseTest{
 	
 	@Test
 	public void getAllScoresByPlayerIdShouldReturnScoresList() {
-		List<Score> list = new ArrayList<Score>();
+		List<Score> list = new ArrayList<>();
 		Integer randomId = getRandomIntegerBetweenRange(1, 10);
 		
 		Score scoreOne = generateRandomScore();

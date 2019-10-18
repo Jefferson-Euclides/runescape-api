@@ -44,7 +44,7 @@ public class PlayerServiceTest extends BaseTest{
 	
 	@Test
 	public void getAllPlayersShouldReturnAllPlayers() {
-		List<Player> list = new ArrayList<Player>();
+		List<Player> list = new ArrayList<>();
 		Player playerOne = generateRandomPlayer();
         Player playerTwo = generateRandomPlayer();
         Player playerThree = generateRandomPlayer();

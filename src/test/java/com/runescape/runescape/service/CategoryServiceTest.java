@@ -41,7 +41,7 @@ public class CategoryServiceTest extends BaseTest{
 	
 	@Test
 	public void getAllCategoriesShouldReturnAllCategories() {
-		List<Category> list = new ArrayList<Category>();
+		List<Category> list = new ArrayList<>();
 		Category categoryOne = generateRandomCategory();
 		Category categoryTwo = generateRandomCategory();
 		Category categoryThree = generateRandomCategory();

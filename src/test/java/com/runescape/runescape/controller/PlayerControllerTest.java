@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
@@ -25,14 +26,12 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.runescape.runescape.model.Player;
+import com.runescape.runescape.service.BaseTest;
 import com.runescape.runescape.service.PlayerService;
 import com.runescape.runescape.util.*;
 
-
-@RunWith(SpringRunner.class)
-@SpringBootTest
 @AutoConfigureMockMvc
-public class PlayerControllerTest {
+public class PlayerControllerTest extends BaseTest{
 
 	@MockBean
 	PlayerService playerService;
@@ -45,22 +44,18 @@ public class PlayerControllerTest {
 	@Test
 	public void getAllPlayersShouldReturnAllPlayers() throws Exception {
 		
-		Player alex = new Player("Test");
-		List<Player> allPlayers = new ArrayList<>();
-		
-		allPlayers.add(alex);
+		List<Player> allPlayers = Arrays.asList(new Player(generateRandomString(10)));
 		
 		given(playerService.getAllPlayers()).willReturn(allPlayers);
 		mvc.perform(get("/players")
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$[0].name", is(alex.getName())));
+				.andExpect(jsonPath("$[0].name", is(allPlayers.get(0).getName())));
 	}
 	
 	@Test
 	public void insertPlayerShouldReturnCreatedPlayer() throws Exception {
-		Player player = new Player();
-		player.setName("Test");
+		Player player = new Player(generateRandomString(10));
 		
 		mvc.perform(post("/players")
 				.content(Utils.asJsonString(player))
@@ -71,8 +66,7 @@ public class PlayerControllerTest {
 	
 	@Test
 	public void updatePlayerShouldReturnUpdatedPlayer() throws Exception {
-		Player player = new Player();
-		player.setName("Test");
+		Player player = new Player(generateRandomString(10));
 		
 		mvc.perform(put("/players/1")
 				.contentType(MediaType.APPLICATION_JSON)

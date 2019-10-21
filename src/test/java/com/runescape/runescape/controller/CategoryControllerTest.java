@@ -8,28 +8,24 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.runescape.runescape.model.Category;
 import com.runescape.runescape.model.Player;
+import com.runescape.runescape.service.BaseTest;
 import com.runescape.runescape.service.CategoryService;
 import com.runescape.runescape.util.Utils;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
 @AutoConfigureMockMvc
-public class CategoryControllerTest {
+public class CategoryControllerTest extends BaseTest{
 	
 	@MockBean
 	private CategoryService categoryService;
@@ -40,22 +36,18 @@ public class CategoryControllerTest {
 	@Test
 	public void getAllCategoriesShouldReturnAllCategories() throws Exception {
 		
-		Category test = new Category("Test");
-		List<Category> allCategories = new ArrayList<>();
-		
-		allCategories.add(test);
+		List<Category> allCategories = Arrays.asList(new Category(generateRandomString(10)));
 		
 		given(categoryService.getAllCategories()).willReturn(allCategories);
 		mvc.perform(get("/categories")
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$[0].name", is(test.getName())));
+				.andExpect(jsonPath("$[0].name", is(allCategories.get(0).getName())));
 	}
 	
 	@Test
 	public void insertCategoryShouldReturnCreatedCategory() throws Exception {
-		Player player = new Player();
-		player.setName("Test");
+		Player player = new Player(generateRandomString(10));
 		
 		mvc.perform(post("/categories")
 				.content(Utils.asJsonString(player))
@@ -66,8 +58,7 @@ public class CategoryControllerTest {
 	
 	@Test
 	public void updateCategoryShouldUpdateCategoryAndReturnOk() throws Exception {
-		Category category = new Category();
-		category.setName("Test");
+		Category category = new Category(generateRandomString(10));
 		
 		mvc.perform(put("/categories/1")
 				.contentType(MediaType.APPLICATION_JSON)
